@@ -30,7 +30,6 @@
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": ["src"]
