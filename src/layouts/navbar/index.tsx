@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import LogoTextBlack from "@/assets/text-black.svg";
 import LogoTextWhite from "@/assets/text-white.svg";
 import ModalNavbar from "@/components/navbar/ModalNavbar";
+import DialogForm from "@/components/dialog";
 
 const navlinks = [
   {
@@ -59,7 +60,7 @@ const Navbar: React.FC = () => {
     <nav
       className={`${
         addBlur ? "drop-shadow-lg backdrop-blur-md" : ""
-      } fixed top-4 w-full z-[100] transition-all duration-300`}
+      } fixed top-4 w-full z-10 transition-all duration-300`}
     >
       <motion.div
         animate={{ y: 0 }}
@@ -88,7 +89,7 @@ const Navbar: React.FC = () => {
           <div className="-mr-2 -my-2 lg:hidden">
             <Button
               variant="ghost"
-              className="rounded-md p-2 inline-flex items-center justify-center text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary"
+              className="rounded-md p-2 inline-flex items-center justify-center text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary cursor-pointer"
               onClick={() => setOpenModalMenu(!openModalMenu)}
               aria-label="Toggle navigation menu"
             >
@@ -110,6 +111,9 @@ const Navbar: React.FC = () => {
               ))}
             </NavigationMenuList>
           </NavigationMenu>
+          <div className="hidden lg:flex items-center">
+            <DialogForm />
+          </div>
           <Button
             variant="ghost"
             onClick={handleMode}

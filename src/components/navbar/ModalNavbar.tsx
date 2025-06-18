@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import DialogForm from "@/components/dialog";
 
 interface NavLink {
   name: string;
@@ -34,22 +35,30 @@ const ModalNavbar: React.FC<ModalNavbarProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 backdrop-blur-lg z-50 p-3 lg:hidden"
+      className="fixed inset-0 backdrop-blur-lg z-20 p-3 lg:hidden"
       onClick={handleOverlayClick}
     >
       <div
         ref={modalRef}
-        className="bg-[oklch(0.145 0 0)] border-2 shadow-2xl rounded-lg p-4 w-full"
+        className="bg-[oklch(0.145 0 0)] border-2 shadow-2xl rounded-lg p-4 w-full flex flex-col gap-2"
       >
         <div className="flex justify-between items-center mb-4">
-          <Button variant="ghost" onClick={handleMode}>
+          <Button
+            variant="ghost"
+            className="cursor-pointer"
+            onClick={handleMode}
+          >
             {theme === "dark" ? (
               <i className="pi pi-sun" />
             ) : (
               <i className="pi pi-moon" />
             )}
           </Button>
-          <Button variant="ghost" onClick={() => setOpenModalMenu(false)}>
+          <Button
+            variant="ghost"
+            className="cursor-pointer"
+            onClick={() => setOpenModalMenu(false)}
+          >
             <i className="pi pi-times text-xl" />
           </Button>
         </div>
@@ -68,6 +77,9 @@ const ModalNavbar: React.FC<ModalNavbarProps> = ({
             </a>
           ))}
         </nav>
+        <div className="mt-2">
+          <DialogForm />
+        </div>
       </div>
     </motion.div>
   );
