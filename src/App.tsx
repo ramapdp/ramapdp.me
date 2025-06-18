@@ -6,15 +6,77 @@ function App() {
     <Fragment>
       <Navbar />
       <div className="container">
-        <div className="min-h-screen bg-background text-foreground">
-          <main className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold text-transparent">
-              Welcome to My Portfolio
-            </h1>
-            <p className="mt-4 text-transparent">
-              This is a sample portfolio built with React and Tailwind CSS.
-            </p>
-          </main>
+        <div className="h-[150vh] flex flex-col items-center justify-center">
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
+          <p className="mt-4">
+            This is a sample portfolio built with React and Tailwind CSS. Lorem
+            ipsum dolor sit amet consectetur adipisicing elit. Sunt, dolores
+            doloribus possimus sint distinctio, laudantium quia inventore
+            recusandae esse molestias dolore cumque laboriosam voluptas
+            repudiandae a, harum ullam expedita. Maiores?
+          </p>
         </div>
       </div>
     </Fragment>

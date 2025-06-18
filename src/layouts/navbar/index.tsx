@@ -15,73 +15,77 @@ import DialogForm from "@/components/dialog";
 
 const navlinks = [
   {
+    name: "Home",
+    href: "#home",
+  },
+  {
     name: "About",
     href: "#about",
   },
   {
-    name: "Experience",
-    href: "#experience",
-  },
-  {
     name: "Projects",
     href: "#projects",
-  },
-  {
-    name: "Uses",
-    href: "#uses",
   },
 ];
 
 const Navbar: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const [addBlur, setAddBlur] = useState<boolean>(false);
+  const [prevScrollPos, setPrevScrollPos] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [openModalMenu, setOpenModalMenu] = useState<boolean>(false);
 
   const handleMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  const addBlurScroll = () => {
-    if (window.scrollY >= 100) {
-      setAddBlur(true);
-    } else {
-      setAddBlur(false);
-    }
+  const handleScroll = () => {
+    const currentScrollPos = window.scrollY;
+    setAddBlur(currentScrollPos > 0);
+    setIsVisible(prevScrollPos > currentScrollPos || currentScrollPos < 150);
+    setPrevScrollPos(currentScrollPos);
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", addBlurScroll);
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
-      window.removeEventListener("scroll", addBlurScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prevScrollPos]);
 
   return (
-    <nav
-      className={`${
-        addBlur ? "drop-shadow-lg backdrop-blur-md" : ""
-      } fixed top-4 w-full z-10 transition-all duration-300`}
-    >
-      <motion.div
-        animate={{ y: 0 }}
-        initial={{ y: -100 }}
-        transition={{ type: "inertia", velocity: 120 }}
+    <nav className="fixed top-4 w-full z-10">
+      <motion.nav
         className="container"
+        initial={{ top: 16 }}
+        animate={{
+          top: isVisible ? 16 : -100,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <div className="flex rounded-4xl justify-end items-center px-0 py-4 gap-4 sm:px-6 lg:py-8 lg:gap-10">
+        <div
+          className={`border ${
+            addBlur
+              ? "drop-shadow-lg backdrop-blur-sm border-accent"
+              : "border-transparent"
+          } flex transition-all duration-300 rounded-2xl justify-end items-center px-0 py-2 gap-4 sm:px-6 lg:py-3 lg:gap-4`}
+        >
           <div className="mr-auto">
-            <a href="#home">
+            <a href="#">
               {theme === "light" ? (
                 <img
                   src={LogoTextBlack}
                   alt="ramapdp"
-                  className="h-9 lg:h-14 w-auto"
+                  className="h-8 lg:h-9 w-auto"
                 />
               ) : (
                 <img
                   src={LogoTextWhite}
                   alt="ramapdp"
-                  className="h-9 lg:h-14 w-auto"
+                  className="h-8 lg:h-9 w-auto"
                 />
               )}
             </a>
@@ -97,13 +101,13 @@ const Navbar: React.FC = () => {
               <i className="pi pi-bars text-xl" aria-hidden="true" />
             </Button>
           </div>
-          <NavigationMenu className="hidden space-x-6 lg:flex lg:space-x-10">
+          <NavigationMenu className="hidden space-x-6 lg:flex lg:space-x-8">
             <NavigationMenuList className="flex space-x-6">
               {navlinks.map((navlink) => (
                 <NavigationMenuItem key={navlink.name}>
                   <NavigationMenuLink
                     href={navlink.href}
-                    className="text-base font-medium"
+                    className="text-sm font-medium hover:scale-105"
                   >
                     {navlink.name}
                   </NavigationMenuLink>
@@ -126,7 +130,7 @@ const Navbar: React.FC = () => {
             )}
           </Button>
         </div>
-      </motion.div>
+      </motion.nav>
       <AnimatePresence>
         {openModalMenu && (
           <ModalNavbar
