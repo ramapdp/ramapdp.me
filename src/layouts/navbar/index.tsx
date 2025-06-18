@@ -6,14 +6,13 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import LogoTextBlack from "@/assets/text-black.svg";
+import LogoTextWhite from "@/assets/text-white.svg";
+import ModalNavbar from "@/components/navbar/ModalNavbar";
 
 const navlinks = [
-  {
-    name: "Home",
-    href: "#home",
-  },
   {
     name: "About",
     href: "#about",
@@ -35,12 +34,10 @@ const navlinks = [
 const Navbar: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const [addBlur, setAddBlur] = useState<boolean>(false);
-  const [modalIsOpen, modalSetItOpen] = useState<boolean>(false);
+  const [openModalMenu, setOpenModalMenu] = useState<boolean>(false);
 
-  console.log(`Current theme: ${theme}`);
   const handleMode = () => {
     setTheme(theme === "dark" ? "light" : "dark");
-    console.log(`Theme changed to: ${theme === "dark" ? "light" : "dark"}`);
   };
 
   const addBlurScroll = () => {
@@ -58,35 +55,43 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  const toggleModal = (): void => {
-    modalSetItOpen(!modalIsOpen);
-  };
-
   return (
     <nav
       className={`${
         addBlur ? "drop-shadow-lg backdrop-blur-md" : ""
-      } fixed top-0 w-full z-[100] transition-all duration-300`}
+      } fixed top-4 w-full z-[100] transition-all duration-300`}
     >
       <motion.div
-        viewport={{ once: true }}
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", duration: 0.5 }}
+        animate={{ y: 0 }}
+        initial={{ y: -100 }}
+        transition={{ type: "inertia", velocity: 120 }}
         className="container"
       >
-        <div className="flex bg-red-300 justify-end items-center px-0 py-4 gap-4 sm:px-6 lg:py-8 lg:gap-10">
+        <div className="flex rounded-4xl justify-end items-center px-0 py-4 gap-4 sm:px-6 lg:py-8 lg:gap-10">
           <div className="mr-auto">
             <a href="#home">
               {theme === "light" ? (
-                <p>Logo untuk Light Mode</p>
+                <img
+                  src={LogoTextBlack}
+                  alt="ramapdp"
+                  className="h-9 lg:h-14 w-auto"
+                />
               ) : (
-                <p>Logo untuk Dark Mode</p>
+                <img
+                  src={LogoTextWhite}
+                  alt="ramapdp"
+                  className="h-9 lg:h-14 w-auto"
+                />
               )}
             </a>
           </div>
           <div className="-mr-2 -my-2 lg:hidden">
-            <Button variant="ghost" className="rounded-md p-2 inline-flex items-center justify-center text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary">
+            <Button
+              variant="ghost"
+              className="rounded-md p-2 inline-flex items-center justify-center text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary"
+              onClick={() => setOpenModalMenu(!openModalMenu)}
+              aria-label="Toggle navigation menu"
+            >
               <span className="sr-only">Open menu</span>
               <i className="pi pi-bars text-xl" aria-hidden="true" />
             </Button>
@@ -111,13 +116,23 @@ const Navbar: React.FC = () => {
             className="hidden cursor-pointer lg:block"
           >
             {theme === "dark" ? (
-              <i className="pi pi-sun h-6 w-6" />
+              <i className="pi pi-sun" />
             ) : (
-              <i className="pi pi-moon h-6 w-6" />
+              <i className="pi pi-moon" />
             )}
           </Button>
         </div>
       </motion.div>
+      <AnimatePresence>
+        {openModalMenu && (
+          <ModalNavbar
+            navlinks={navlinks}
+            theme={theme}
+            handleMode={handleMode}
+            setOpenModalMenu={setOpenModalMenu}
+          />
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
