@@ -26,10 +26,14 @@
     /* Alias Import */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
+      "assets/*": ["src/assets/*"],
+      "components/*": ["src/components/*"],
+      "data/*": ["src/data/*"],
+      "layouts/*": ["src/layouts/*"],
+      "lib/*": ["src/lib/*"],
+      "pages/*": ["src/pages/*"],
+      "types/*": ["src/types/*"],
+      "utils/*": ["src/utils/*"]
     }
   },
   "include": ["src"]

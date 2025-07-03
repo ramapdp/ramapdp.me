@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import DialogForm from "@/components/dialog";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "components/ui/button";
+import DialogForm from "layouts/form-email";
 
 interface NavLink {
   name: string;
@@ -10,17 +10,10 @@ interface NavLink {
 
 interface ModalNavbarProps {
   navlinks: NavLink[];
-  theme: string;
-  handleMode: () => void;
   setOpenModalMenu: (value: boolean) => void;
 }
 
-const ModalNavbar: React.FC<ModalNavbarProps> = ({
-  navlinks,
-  theme,
-  handleMode,
-  setOpenModalMenu,
-}) => {
+const ModalNavbar: React.FC<ModalNavbarProps> = ({ navlinks, setOpenModalMenu }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -31,56 +24,84 @@ const ModalNavbar: React.FC<ModalNavbarProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 backdrop-blur-lg z-20 p-3 lg:hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="fixed inset-0 backdrop-blur-xl bg-black/20 z-20 p-3 lg:hidden"
       onClick={handleOverlayClick}
     >
-      <div
+      <motion.div
         ref={modalRef}
-        className="bg-[oklch(0.145 0 0)] border-2 shadow-2xl rounded-lg p-4 w-full flex flex-col gap-2"
+        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+        transition={{
+          duration: 0.4,
+          ease: [0.4, 0, 0.2, 1],
+          staggerChildren: 0.05,
+        }}
+        className="bg-card/95 backdrop-blur-md border-2 shadow-2xl rounded-lg p-4 w-full flex flex-col gap-2"
       >
-        <div className="flex justify-between items-center mb-4">
-          <Button
-            variant="ghost"
-            className="cursor-pointer"
-            onClick={handleMode}
-          >
-            {theme === "dark" ? (
-              <i className="pi pi-sun" />
-            ) : (
-              <i className="pi pi-moon" />
-            )}
+        <motion.div
+          className="flex justify-end items-center mb-4"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+        >
+          <Button variant="ghost" className="cursor-pointer" onClick={() => setOpenModalMenu(false)}>
+            <motion.i
+              className="pi pi-times text-xl"
+              whileHover={{ rotate: 90, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+            />
           </Button>
-          <Button
-            variant="ghost"
-            className="cursor-pointer"
-            onClick={() => setOpenModalMenu(false)}
-          >
-            <i className="pi pi-times text-xl" />
-          </Button>
-        </div>
+        </motion.div>
+
         <nav className="space-y-2">
-          {navlinks.map((navlink) => (
-            <a
+          {navlinks.map((navlink, index) => (
+            <motion.a
               key={navlink.name}
               href={navlink.href}
-              className="group flex items-center px-3 py-1 text-base rounded-md font-medium hover:bg-accent transition-colors duration-200"
+              className="group flex items-center px-3 py-3 text-base rounded-md font-medium hover:bg-accent transition-all duration-300 hover:scale-[102%] hover:shadow-md"
               onClick={() => setOpenModalMenu(false)}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                delay: 0.15 + index * 0.05,
+                duration: 0.4,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+              whileHover={{ x: 8 }}
+              whileTap={{ scale: 0.98 }}
             >
               {navlink.name}
-              <span className="inline-block ml-2 text-lg transition-transform duration-300 transform translate-x-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-1">
+              <motion.span
+                className="inline-block ml-2 text-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
+                initial={{ x: -10, opacity: 0 }}
+                whileHover={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.2 }}
+              >
                 →
-              </span>
-            </a>
+              </motion.span>
+            </motion.a>
           ))}
         </nav>
-        <div className="mt-2">
+
+        <motion.div
+          className="mt-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.4,
+            ease: [0.4, 0, 0.2, 1],
+          }}
+        >
           <DialogForm />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };

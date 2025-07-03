@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from "components/ui/dialog";
+import { Input } from "components/ui/input";
+import { Label } from "components/ui/label";
+import { Textarea } from "components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
@@ -26,11 +26,9 @@ const DialogForm = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -86,9 +84,7 @@ const DialogForm = () => {
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Say Hello 👋🏻</DialogTitle>
-            <DialogDescription>
-              Send me a message and I'll get back to you as soon as possible.
-            </DialogDescription>
+            <DialogDescription>Send me a message and I'll get back to you as soon as possible.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -142,19 +138,11 @@ const DialogForm = () => {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button
-                variant="outline"
-                type="button"
-                className="cursor-pointer"
-              >
+              <Button variant="outline" type="button" className="cursor-pointer">
                 Cancel
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              className="cursor-pointer"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="cursor-pointer" disabled={isSubmitting}>
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <i className="pi pi-spinner pi-spin" />

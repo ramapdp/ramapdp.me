@@ -1,10 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-inter: "Inter", sans-serif;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter);
   line-height: 1.5;
   font-weight: 400;
 
@@ -48,6 +54,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Navbar-specific theme transition variables */
+  --navbar-theme-transition-duration: 600ms;
+  --navbar-theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -133,8 +143,63 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+    /* Remove global transitions - they cause flickering */
+  }
+
+  /* Navbar-specific smooth transitions for theme changes */
+  .navbar-container,
+  .navbar-container *,
+  .navbar-container *::before,
+  .navbar-container *::after {
+    transition: background-color var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      border-color var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      /* color var(--navbar-theme-transition-duration, 600ms) var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)), */
+        fill var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      stroke var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      /* opacity var(--navbar-theme-transition-duration, 600ms) var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)), */
+        box-shadow var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      backdrop-filter var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1));
+  }
+
+  /* Fix navbar link flicker during theme transition */
+  .navbar-container .navbar-link {
+    transition: color var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-container .navbar-link:hover {
+    color: hsl(var(--primary));
+    transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Enhanced handling for navbar theme transitioning state */
+  .navbar-theme-transitioning .navbar-container * {
+    transition-duration: var(--navbar-theme-transition-duration, 600ms) !important;
+    transition-timing-function: var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)) !important;
+  }
+
+  /* Prevent jarring transitions on interactive elements during theme change - navbar only */
+  .navbar-theme-transitioning .navbar-container button,
+  .navbar-theme-transitioning .navbar-container input,
+  .navbar-theme-transitioning .navbar-container textarea,
+  .navbar-theme-transitioning .navbar-container select {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow !important;
+  }
+
+  /* Smooth navbar specific transitions */
+  .navbar-backdrop {
+    transition: backdrop-filter 400ms cubic-bezier(0.4, 0, 0.2, 1), background-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 400ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
