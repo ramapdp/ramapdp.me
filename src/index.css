@@ -58,6 +58,11 @@
   /* Navbar-specific theme transition variables */
   --navbar-theme-transition-duration: 600ms;
   --navbar-theme-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Scrollbar theme variables - Light theme */
+  --scrollbar-track: oklch(0.98 0 0);
+  --scrollbar-thumb: oklch(0.85 0 0);
+  --scrollbar-thumb-hover: oklch(0.75 0 0);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -137,6 +142,11 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Scrollbar theme variables - Dark theme */
+  --scrollbar-track: oklch(0.205 0 0);
+  --scrollbar-thumb: oklch(0.35 0 0);
+  --scrollbar-thumb-hover: oklch(0.45 0 0);
 }
 
 @layer base {
@@ -221,18 +231,54 @@
   @apply mx-auto max-w-6xl;
 }
 
+/* Theme-aware scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  background-color: transparent;
+  background-color: var(--scrollbar-track);
+  transition: background-color var(--navbar-theme-transition-duration, 600ms) 
+              var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(102, 163, 163, 0.35);
-  padding: 2px;
+  background-color: var(--scrollbar-thumb);
   border-radius: 8px;
+  border: 2px solid var(--scrollbar-track);
+  transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #66a3a3a3;
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: var(--scrollbar-track);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Enhanced scrollbar for specific containers */
+.scrollbar-themed {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.scrollbar-themed::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: var(--scrollbar-track);
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 8px;
+  border: 2px solid var(--scrollbar-track);
+}
+
+.scrollbar-themed::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }
