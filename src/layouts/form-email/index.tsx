@@ -48,7 +48,7 @@ const DialogForm = () => {
           subject: formData.subject,
           message: formData.message,
         },
-        `${import.meta.env.VITE_EMAIL_PUBLIC_KEY}`
+        `${import.meta.env.VITE_EMAIL_PUBLIC_KEY}`,
       );
 
       // const result = await new Promise((resolve) =>

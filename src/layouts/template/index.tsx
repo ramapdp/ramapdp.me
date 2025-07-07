@@ -8,7 +8,7 @@ const Template: React.FC = () => {
       <Navbar />
       <div className="container">
         <Outlet />
-        <footer className="mt-8 text-center text-sm text-muted-foreground">
+        <footer className="text-muted-foreground mt-8 text-center text-sm">
           <p>
             Made with <span className="text-red-500">❤</span> by{" "}
             <a href="#" className="text-blue-500 hover:underline">

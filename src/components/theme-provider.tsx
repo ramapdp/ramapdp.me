@@ -31,7 +31,6 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme);
-
   const [actualTheme, setActualTheme] = useState<"dark" | "light">("light");
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
@@ -45,17 +44,15 @@ export function ThemeProvider({
       if (withTransition && newActualTheme !== actualTheme) {
         setIsTransitioning(true);
 
-        // Add smooth transition styling for navbar only
+        // Add smooth transition styling for everything except theme button
         root.style.setProperty("--navbar-theme-transition-duration", "600ms");
         root.style.setProperty("--navbar-theme-transition-easing", "cubic-bezier(0.4, 0, 0.2, 1)");
         root.classList.add("navbar-theme-transitioning");
 
-        // Apply theme change with delay for smooth animation
-        setTimeout(() => {
-          root.classList.remove("light", "dark");
-          root.classList.add(newActualTheme);
-          setActualTheme(newActualTheme);
-        }, 50);
+        // Apply theme change immediately
+        root.classList.remove("light", "dark");
+        root.classList.add(newActualTheme);
+        setActualTheme(newActualTheme);
 
         // Clean up transition classes
         setTimeout(() => {
@@ -63,7 +60,7 @@ export function ThemeProvider({
           root.classList.remove("navbar-theme-transitioning");
           root.style.removeProperty("--navbar-theme-transition-duration");
           root.style.removeProperty("--navbar-theme-transition-easing");
-        }, 650);
+        }, 600);
       } else {
         // Initial setup without animation
         root.classList.remove("light", "dark");
@@ -104,10 +101,8 @@ export function ThemeProvider({
         root.style.setProperty("--navbar-theme-transition-easing", "cubic-bezier(0.4, 0, 0.2, 1)");
         root.classList.add("navbar-theme-transitioning");
 
-        // Change theme with smooth transition
-        setTimeout(() => {
-          setTheme(newTheme);
-        }, 500);
+        // Change theme immediately
+        setTheme(newTheme);
 
         // End transition state after animation completes
         setTimeout(() => {
@@ -115,7 +110,7 @@ export function ThemeProvider({
           root.classList.remove("navbar-theme-transitioning");
           root.style.removeProperty("--navbar-theme-transition-duration");
           root.style.removeProperty("--navbar-theme-transition-easing");
-        }, 650);
+        }, 600);
       } else {
         // No visual change needed, just update theme preference
         setTheme(newTheme);

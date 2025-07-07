@@ -146,50 +146,57 @@
 
   body {
     @apply bg-background text-foreground;
-    /* Remove global transitions - they cause flickering */
   }
 
   /* Navbar-specific smooth transitions for theme changes */
   .navbar-container,
-  .navbar-container *,
-  .navbar-container *::before,
-  .navbar-container *::after {
-    transition: background-color var(--navbar-theme-transition-duration, 600ms)
+  .navbar-container *:not(.theme-button):not(.theme-button *) {
+    transition:
+      background-color var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
       border-color var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
-      /* color var(--navbar-theme-transition-duration, 600ms) var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)), */
-        fill var(--navbar-theme-transition-duration, 600ms)
+      color var(--navbar-theme-transition-duration, 600ms)
+        var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
+      fill var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
       stroke var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
-      /* opacity var(--navbar-theme-transition-duration, 600ms) var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)), */
-        box-shadow var(--navbar-theme-transition-duration, 600ms)
+      box-shadow var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
       backdrop-filter var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1));
   }
 
+  /* Exclude theme button from smooth transitions */
+  .theme-button,
+  .theme-button * {
+    transition: none !important;
+  }
+
   /* Fix navbar link flicker during theme transition */
   .navbar-container .navbar-link {
-    transition: color var(--navbar-theme-transition-duration, 600ms)
+    transition:
+      color var(--navbar-theme-transition-duration, 600ms)
         var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)),
       background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .navbar-container .navbar-link:hover {
     color: hsl(var(--primary));
-    transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      color 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Enhanced handling for navbar theme transitioning state */
-  .navbar-theme-transitioning .navbar-container * {
+  .navbar-theme-transitioning .navbar-container *:not(.theme-button):not(.theme-button *) {
     transition-duration: var(--navbar-theme-transition-duration, 600ms) !important;
     transition-timing-function: var(--navbar-theme-transition-easing, cubic-bezier(0.4, 0, 0.2, 1)) !important;
   }
 
   /* Prevent jarring transitions on interactive elements during theme change - navbar only */
-  .navbar-theme-transitioning .navbar-container button,
+  .navbar-theme-transitioning .navbar-container button:not(.theme-button),
   .navbar-theme-transitioning .navbar-container input,
   .navbar-theme-transitioning .navbar-container textarea,
   .navbar-theme-transitioning .navbar-container select {
@@ -198,11 +205,34 @@
 
   /* Smooth navbar specific transitions */
   .navbar-backdrop {
-    transition: backdrop-filter 400ms cubic-bezier(0.4, 0, 0.2, 1), background-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 400ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      backdrop-filter 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 .container {
-  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.container-nav {
+  @apply mx-auto max-w-6xl;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(102, 163, 163, 0.35);
+  padding: 2px;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #66a3a3a3;
 }
