@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+}
+
+:root {
+  font-family: var(--font-inter);
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+}
+/* Animation constants */
+:root {
+  /* Navigation animations */
+  --nav-transition-duration: 0.3s;
+  --nav-spring-stiffness: 400;
+  --nav-spring-damping: 30;
+  
+  /* Theme transition duration */
+  --theme-transition-duration: 300ms;
+  
+  /* Scrollbar animation duration */
+  --scrollbar-transition-duration: 300ms;
+  
+  /* Page transition duration */
+  --page-transition-duration: 150ms;
+}
