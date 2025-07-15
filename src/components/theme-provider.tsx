@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -31,42 +31,47 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme);
-  const [actualTheme, setActualTheme] = useState<"dark" | "light">("light");
+  const [actualTheme, setActualTheme] = useState<"dark" | "light">(() => {
+    // Initialize actualTheme immediately to prevent flicker
+    const savedTheme = (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    return savedTheme === "system" ? (mediaQuery.matches ? "dark" : "light") : (savedTheme as "dark" | "light");
+  });
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
 
-  useEffect(() => {
+  const applyTheme = useCallback((newActualTheme: "dark" | "light", withTransition = false) => {
     const root = window.document.documentElement;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    
+    if (withTransition && newActualTheme !== actualTheme) {
+      setIsTransitioning(true);
+      
+      // Add transition class only to body and main containers, not navbar
+      document.body.classList.add("theme-transitioning");
+      
+      // Apply theme immediately
+      root.classList.remove("light", "dark");
+      root.classList.add(newActualTheme);
+      setActualTheme(newActualTheme);
 
+      // Clean up transition after animation
+      setTimeout(() => {
+        setIsTransitioning(false);
+        document.body.classList.remove("theme-transitioning");
+      }, 300);
+    } else {
+      // Apply theme without transition
+      root.classList.remove("light", "dark");
+      root.classList.add(newActualTheme);
+      setActualTheme(newActualTheme);
+    }
+  }, [actualTheme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    
     const updateTheme = (withTransition = false) => {
       const newActualTheme = theme === "system" ? (mediaQuery.matches ? "dark" : "light") : (theme as "dark" | "light");
-
-      if (withTransition && newActualTheme !== actualTheme) {
-        setIsTransitioning(true);
-
-        // Add smooth transition styling for everything except theme button
-        root.style.setProperty("--navbar-theme-transition-duration", "600ms");
-        root.style.setProperty("--navbar-theme-transition-easing", "cubic-bezier(0.4, 0, 0.2, 1)");
-        root.classList.add("navbar-theme-transitioning");
-
-        // Apply theme change immediately
-        root.classList.remove("light", "dark");
-        root.classList.add(newActualTheme);
-        setActualTheme(newActualTheme);
-
-        // Clean up transition classes
-        setTimeout(() => {
-          setIsTransitioning(false);
-          root.classList.remove("navbar-theme-transitioning");
-          root.style.removeProperty("--navbar-theme-transition-duration");
-          root.style.removeProperty("--navbar-theme-transition-easing");
-        }, 600);
-      } else {
-        // Initial setup without animation
-        root.classList.remove("light", "dark");
-        root.classList.add(newActualTheme);
-        setActualTheme(newActualTheme);
-      }
+      applyTheme(newActualTheme, withTransition);
     };
 
     // Initial theme setup (no transition)
@@ -78,7 +83,7 @@ export function ThemeProvider({
       mediaQuery.addEventListener("change", handleSystemChange);
       return () => mediaQuery.removeEventListener("change", handleSystemChange);
     }
-  }, [theme, actualTheme]);
+  }, [theme, applyTheme]);
 
   const value = {
     theme,
@@ -92,28 +97,12 @@ export function ThemeProvider({
       const newActualTheme =
         newTheme === "system" ? (mediaQuery.matches ? "dark" : "light") : (newTheme as "dark" | "light");
 
-      // Only trigger transition if actual theme will change
+      // Update theme state immediately
+      setTheme(newTheme);
+      
+      // Apply theme with transition only if actual theme changes
       if (newActualTheme !== actualTheme) {
-        setIsTransitioning(true);
-
-        const root = window.document.documentElement;
-        root.style.setProperty("--navbar-theme-transition-duration", "600ms");
-        root.style.setProperty("--navbar-theme-transition-easing", "cubic-bezier(0.4, 0, 0.2, 1)");
-        root.classList.add("navbar-theme-transitioning");
-
-        // Change theme immediately
-        setTheme(newTheme);
-
-        // End transition state after animation completes
-        setTimeout(() => {
-          setIsTransitioning(false);
-          root.classList.remove("navbar-theme-transitioning");
-          root.style.removeProperty("--navbar-theme-transition-duration");
-          root.style.removeProperty("--navbar-theme-transition-easing");
-        }, 600);
-      } else {
-        // No visual change needed, just update theme preference
-        setTheme(newTheme);
+        applyTheme(newActualTheme, true);
       }
     },
   };

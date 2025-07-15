@@ -1,15 +1,16 @@
-import NavigationMenu from "components/navbar/NavigationMenu";
-import ThemeButton from "components/navbar/ThemeButton";
-import { Separator } from "components/ui/separator";
+import NavigationMenu from "components/navbar/navigation/NavigationMenu";
+import ThemeButton from "components/navbar/button-theme/ThemeButton";
+import { NavbarContainer } from "components/navbar/NavbarContainer";
+import { NavbarSeparator } from "components/common/separator/SeparatorNavbar";
 
 const Navbar = () => {
   return (
     <nav className="navbar-container fixed top-4 z-10 w-full">
-      <div className="container-nav bg-primary flex w-fit items-center justify-center gap-3 rounded-full p-1 shadow-md dark:bg-gray-800">
+      <NavbarContainer>
         <NavigationMenu />
-        <Separator orientation="vertical" className="bg-border h-6 w-px opacity-50" />
+        <NavbarSeparator />
         <ThemeButton />
-      </div>
+      </NavbarContainer>
     </nav>
   );
 };
