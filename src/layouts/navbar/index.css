@@ -1,9 +1,9 @@
 /* Enhanced glassmorphism navbar styles */
 .navbar-glassmorphism {
-  background: rgba(156, 163, 175, 0.15);
+  background: rgba(156, 163, 175, 0.1);
   border: 1px solid rgba(156, 163, 175, 0.2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: none !important;
 }
@@ -83,7 +83,7 @@
 }
 
 .dark .nav-active-indicator {
-  background: rgba(15, 15, 15, 0.9);
+  background: rgba(15, 15, 15, 0.1);
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 

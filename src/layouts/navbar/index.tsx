@@ -2,6 +2,7 @@ import NavigationMenu from "components/navbar/navigation/NavigationMenu";
 import ThemeButton from "components/navbar/button-theme/ThemeButton";
 import { NavbarContainer } from "components/navbar/NavbarContainer";
 import { NavbarSeparator } from "components/common/separator/SeparatorNavbar";
+import "./index.css";
 
 const Navbar = () => {
   return (

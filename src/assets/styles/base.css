@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rethink+Sans:ital,wght@0,400..800;1,400..800&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -8,8 +9,9 @@
 
 @theme {
   --font-inter: "Inter", sans-serif;
-  --font-code:
+  --font-fira-code:
     "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-rethink-sans: "Rethink Sans", sans-serif;
 }
 
 :root {
@@ -48,8 +50,12 @@
   --page-transition-duration: 150ms;
 }
 
-.font-code {
-  font-family: var(--font-code);
+.font-fira-code {
+  font-family: var(--font-fira-code);
+}
+
+.font-rethink-sans {
+  font-family: var(--font-rethink-sans);
 }
 
 /* 2 garis putus-putus sepanjang halaman */
@@ -89,8 +95,8 @@
     /* ukuran pattern putus-putus garis pertama */ 1px 16px; /* ukuran pattern putus-putus garis kedua */
 
   background-position:
-    70px 0,
-    /* posisi garis pertama dari kiri */ 170px 0; /* posisi garis kedua dari kiri */
+    90px 0,
+    /* posisi garis pertama dari kiri */ 190px 0; /* posisi garis kedua dari kiri */
 
   background-repeat: repeat-y, repeat-y;
 
@@ -129,19 +135,4 @@
 html,
 body {
   min-height: 100%;
-}
-
-/* Optional: glass-card tweak */
-.glass-card {
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.particle {
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-/* opsional: glow halus saat hover di area visual */
-.group\/visual:hover .particle {
-  filter: saturate(1.25) drop-shadow(0 0 6px rgba(255, 255, 255, 0.12));
 }

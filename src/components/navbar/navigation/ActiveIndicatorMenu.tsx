@@ -7,7 +7,7 @@ interface ActiveIndicatorProps {
 
 const ActiveIndicator = ({ style, isVisible }: ActiveIndicatorProps) => (
   <motion.div
-    className="absolute top-0 bottom-0 z-0 rounded-full bg-white/90 shadow-md backdrop-blur-sm dark:bg-gray-900/90"
+    className="absolute top-0 bottom-0 z-0 rounded-full bg-white/70 shadow-md backdrop-blur-sm dark:bg-gray-900/70"
     style={style}
     initial={{
       opacity: 0,
