@@ -12,8 +12,7 @@ import {
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import * as THREE from "three";
-
-// replace with your own imports, see the usage snippet for details
+import "./index.css";
 import cardGLB from "assets/lanyard/card-no-texture.glb";
 import lanyard from "assets/lanyard/band-3.png";
 
@@ -26,11 +25,7 @@ interface LanyardProps {
   transparent?: boolean;
 }
 
-export default function Lanyard({
-  position = [0, 0, 30],
-  gravity = [0, -40, 0],
-  transparent = true,
-}: LanyardProps) {
+export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], transparent = true }: LanyardProps) {
   const [isSmall, setIsSmall] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth < 768; // sm breakpoint
@@ -50,11 +45,26 @@ export default function Lanyard({
   const responsiveFov = isSmall ? 30 : 18;
 
   return (
-    <div className="relative flex h-screen w-full scale-100 transform items-center justify-center">
+    <div className="lanyard-canvas relative flex h-screen w-full scale-100 transform items-center justify-center">
       <Canvas
         camera={{ position, fov: responsiveFov }}
-        gl={{ alpha: transparent }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000), transparent ? 0 : 1)}
+        gl={{
+          alpha: transparent,
+          antialias: true,
+          powerPreference: "high-performance",
+          // HD settings
+          outputColorSpace: THREE.SRGBColorSpace,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1,
+        }}
+        dpr={[1, 2]} // Device pixel ratio untuk HD
+        onCreated={({ gl, scene }) => {
+          // HD optimizations
+          gl.setClearColor(new THREE.Color(0x000), transparent ? 0 : 1);
+          gl.shadowMap.enabled = true;
+          gl.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows untuk kualitas HD
+          scene.fog = null; // Remove fog untuk clarity maksimal
+        }}
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={1 / 60}>
@@ -124,6 +134,20 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
 
   const { nodes, materials } = useGLTF(cardGLB) as any;
   const texture = useTexture(lanyard);
+
+  // HD texture optimizations
+  useEffect(() => {
+    if (texture) {
+      texture.generateMipmaps = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = 16; // Maximum anisotropy untuk detail tekstur terbaik
+      texture.format = THREE.RGBAFormat;
+      texture.flipY = false;
+      texture.needsUpdate = true;
+    }
+  }, [texture]);
+
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]),
@@ -189,7 +213,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(32));
+      band.current.geometry.setPoints(curve.getPoints(64)); // Increased points untuk smoothness
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
@@ -237,7 +261,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
             }}
           >
-            <mesh geometry={nodes.card.geometry}>
+            <mesh geometry={nodes.card.geometry} castShadow receiveShadow>
               <meshPhysicalMaterial
                 map={materials.base.map}
                 map-anisotropy={16}
@@ -245,10 +269,20 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
                 clearcoatRoughness={0.15}
                 roughness={0.9}
                 metalness={0.8}
+                // HD material settings
+                transparent={false}
+                alphaTest={0.1}
+                side={THREE.DoubleSide}
               />
             </mesh>
-            <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
-            <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+            <mesh
+              geometry={nodes.clip.geometry}
+              material={materials.metal}
+              material-roughness={0.3}
+              castShadow
+              receiveShadow
+            />
+            <mesh geometry={nodes.clamp.geometry} material={materials.metal} castShadow receiveShadow />
           </group>
         </RigidBody>
       </group>
@@ -257,11 +291,14 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
         <meshLineMaterial
           color="white"
           depthTest={false}
-          resolution={isSmall ? [1000, 2000] : [1000, 1000]}
+          resolution={isSmall ? [1920, 1080] : [2560, 1440]}
           useMap
           map={texture}
           repeat={[-4, 1]}
           lineWidth={1}
+          transparent={true}
+          alphaTest={0.1}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </>

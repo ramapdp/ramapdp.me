@@ -1,0 +1,12 @@
+.lanyard-canvas {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* Untuk memastikan canvas render dengan pixel ratio yang tepat */
+canvas {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
