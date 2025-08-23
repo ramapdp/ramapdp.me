@@ -12,6 +12,7 @@
   --font-fira-code:
     "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-rethink-sans: "Rethink Sans", sans-serif;
+  --color-peach: #fda695;
 }
 
 :root {
@@ -104,7 +105,7 @@
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 100%);
   mask-image: linear-gradient(to bottom, black 0%, black 100%);
 
-  opacity: 0.8;
+  opacity: 1;
   pointer-events: none;
 }
 

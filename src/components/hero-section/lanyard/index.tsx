@@ -15,7 +15,7 @@ import * as THREE from "three";
 
 // replace with your own imports, see the usage snippet for details
 import cardGLB from "assets/lanyard/card-no-texture.glb";
-import lanyard from "assets/lanyard/lanyard-1.png";
+import lanyard from "assets/lanyard/band-3.png";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
@@ -29,15 +29,32 @@ interface LanyardProps {
 export default function Lanyard({
   position = [0, 0, 30],
   gravity = [0, -40, 0],
-  fov = 20,
   transparent = true,
 }: LanyardProps) {
+  const [isSmall, setIsSmall] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768; // sm breakpoint
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = (): void => {
+      setIsSmall(window.innerWidth < 768); // sm breakpoint
+    };
+
+    window.addEventListener("resize", handleResize);
+    return (): void => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const responsiveFov = isSmall ? 30 : 18;
+
   return (
-    <div className="relative z-0 flex h-screen w-full origin-center scale-100 transform items-center justify-center">
+    <div className="relative flex h-screen w-full scale-100 transform items-center justify-center">
       <Canvas
-        camera={{ position, fov }}
+        camera={{ position, fov: responsiveFov }}
         gl={{ alpha: transparent }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000), transparent ? 0 : 1)}
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={1 / 60}>
@@ -182,9 +199,13 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
   curve.curveType = "chordal";
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
+  const groupPosition: [number, number, number] = isSmall
+    ? [1.2, 4.8, 0] // Center on mobile
+    : [2.3, 4.4, 0]; // Right side on desktop
+
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={groupPosition}>
         <RigidBody ref={fixed} {...segmentProps} type={"fixed" as RigidBodyProps["type"]} />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type={"dynamic" as RigidBodyProps["type"]}>
           <BallCollider args={[0.1]} />
