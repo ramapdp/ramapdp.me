@@ -176,7 +176,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.45, 0],
+    [0, 1.5, 0],
   ]);
 
   useEffect(() => {
@@ -213,7 +213,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(64)); // Increased points untuk smoothness
+      band.current.geometry.setPoints(curve.getPoints(128)); // Increased points untuk smoothness
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
@@ -291,7 +291,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
         <meshLineMaterial
           color="white"
           depthTest={false}
-          resolution={isSmall ? [1920, 1080] : [2560, 1440]}
+          resolution={isSmall ? [3000, 3000] : [2000, 2000]}
           useMap
           map={texture}
           repeat={[-4, 1]}
