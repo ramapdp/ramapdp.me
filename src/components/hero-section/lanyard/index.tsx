@@ -21,7 +21,6 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 interface LanyardProps {
   position?: [number, number, number];
   gravity?: [number, number, number];
-  fov?: number;
   transparent?: boolean;
 }
 
@@ -112,7 +111,8 @@ interface BandProps {
 
 function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
   // Using "any" for refs since the exact types depend on Rapier's internals
-  const band = useRef<any>(null);
+  const band1 = useRef<any>(null); // First strand
+  const band2 = useRef<any>(null); // Second strand
   const fixed = useRef<any>(null);
   const j1 = useRef<any>(null);
   const j2 = useRef<any>(null);
@@ -148,10 +148,16 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
     }
   }, [texture]);
 
-  const [curve] = useState(
+  // Create two curves for the two strands
+  const [curve1] = useState(
     () =>
       new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]),
   );
+  const [curve2] = useState(
+    () =>
+      new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]),
+  );
+
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
 
@@ -209,18 +215,41 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed)),
         );
       });
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(128)); // Increased points untuk smoothness
+
+      // Create two curves for the lanyard strands forming a V shape with point at bottom
+      const strandOffset = 0.4; // Distance between the two strands at top
+
+      // Fixed connection point at the bottom - both strands meet here
+      const connectionPoint = new THREE.Vector3().copy(j3.current.translation()).add(new THREE.Vector3(0, 0, 0));
+
+      // First strand (left side) - starts from fixed connection point, spreads to left
+      curve1.points[0].copy(connectionPoint); // Fixed bottom point
+      curve1.points[1].copy(j2.current.lerped).add(new THREE.Vector3(-strandOffset * 0.3, 0, 0.01));
+      curve1.points[2].copy(j1.current.lerped).add(new THREE.Vector3(-strandOffset * 0.7, 0, 0.008));
+      curve1.points[3].copy(fixed.current.translation()).add(new THREE.Vector3(-strandOffset, 0, 0.005)); // Wide at top
+
+      // Second strand (right side) - starts from same fixed connection point, spreads to right
+      curve2.points[0].copy(connectionPoint); // Same fixed bottom point
+      curve2.points[1].copy(j2.current.lerped).add(new THREE.Vector3(strandOffset * 0.3, 0, -0.01));
+      curve2.points[2].copy(j1.current.lerped).add(new THREE.Vector3(strandOffset * 0.7, 0, -0.008));
+      curve2.points[3].copy(fixed.current.translation()).add(new THREE.Vector3(strandOffset, 0, -0.005)); // Wide at top
+
+      // Update both band geometries
+      if (band1.current) {
+        band1.current.geometry.setPoints(curve1.getPoints(64));
+      }
+      if (band2.current) {
+        band2.current.geometry.setPoints(curve2.getPoints(64));
+      }
+
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
     }
   });
 
-  curve.curveType = "chordal";
+  curve1.curveType = "chordal";
+  curve2.curveType = "chordal";
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   const groupPosition: [number, number, number] = isSmall
@@ -286,16 +315,37 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
           </group>
         </RigidBody>
       </group>
-      <mesh ref={band}>
+
+      {/* First lanyard strand (left - always on top) */}
+      <mesh ref={band1}>
         <meshLineGeometry />
         <meshLineMaterial
           color="white"
-          depthTest={false}
+          depthTest={true}
+          depthWrite={true}
           resolution={isSmall ? [3000, 3000] : [2000, 2000]}
           useMap
           map={texture}
           repeat={[-4, 1]}
-          lineWidth={1}
+          lineWidth={0.8}
+          transparent={true}
+          alphaTest={0.1}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Second lanyard strand (right - always behind) */}
+      <mesh ref={band2}>
+        <meshLineGeometry />
+        <meshLineMaterial
+          color="white"
+          depthTest={true}
+          depthWrite={false} // Don't write to depth buffer to allow left strand to always appear on top
+          resolution={isSmall ? [3000, 3000] : [2000, 2000]}
+          useMap
+          map={texture}
+          repeat={[-4, 1]}
+          lineWidth={0.8}
           transparent={true}
           alphaTest={0.1}
           side={THREE.DoubleSide}
