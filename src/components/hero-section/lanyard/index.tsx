@@ -185,12 +185,19 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
     [0, 1.5, 0],
   ]);
 
+  // Cursor management yang diperbaiki
   useEffect(() => {
     if (hovered) {
-      document.body.style.cursor = dragged ? "grabbing" : "grab";
+      const cursor = dragged ? "grabbing" : "grab";
+      document.body.style.cursor = cursor;
+      
+      // Cleanup function yang memastikan cursor dikembalikan
       return () => {
         document.body.style.cursor = "auto";
       };
+    } else {
+      // Reset cursor saat tidak hover
+      document.body.style.cursor = "auto";
     }
   }, [hovered, dragged]);
 
@@ -279,15 +286,36 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
           <group
             scale={2.25}
             position={[0, -1.2, -0.05]}
-            onPointerOver={() => hover(true)}
-            onPointerOut={() => hover(false)}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              hover(true);
+            }}
+            onPointerOut={(e) => {
+              e.stopPropagation();
+              hover(false);
+            }}
             onPointerUp={(e: any) => {
-              e.target.releasePointerCapture(e.pointerId);
+              e.stopPropagation();
+              if (e.target.hasPointerCapture && e.target.hasPointerCapture(e.pointerId)) {
+                e.target.releasePointerCapture(e.pointerId);
+              }
               drag(false);
             }}
             onPointerDown={(e: any) => {
-              e.target.setPointerCapture(e.pointerId);
+              e.stopPropagation();
+              if (e.target.setPointerCapture) {
+                e.target.setPointerCapture(e.pointerId);
+              }
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+            }}
+            onPointerMove={(e: any) => {
+              // Memastikan drag tetap aktif saat pointer bergerak
+              if (dragged && e.target.hasPointerCapture && e.target.hasPointerCapture(e.pointerId)) {
+                e.stopPropagation();
+              }
+            }}
+            style={{
+              cursor: hovered ? (dragged ? 'grabbing' : 'grab') : 'auto'
             }}
           >
             <mesh geometry={nodes.card.geometry} castShadow receiveShadow>
