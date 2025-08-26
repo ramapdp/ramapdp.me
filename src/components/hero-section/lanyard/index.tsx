@@ -190,7 +190,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
     if (hovered) {
       const cursor = dragged ? "grabbing" : "grab";
       document.body.style.cursor = cursor;
-      
+
       // Cleanup function yang memastikan cursor dikembalikan
       return () => {
         document.body.style.cursor = "auto";
@@ -286,11 +286,11 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
           <group
             scale={2.25}
             position={[0, -1.2, -0.05]}
-            onPointerOver={(e) => {
+            onPointerOver={e => {
               e.stopPropagation();
               hover(true);
             }}
-            onPointerOut={(e) => {
+            onPointerOut={e => {
               e.stopPropagation();
               hover(false);
             }}
@@ -309,13 +309,12 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
             }}
             onPointerMove={(e: any) => {
-              // Memastikan drag tetap aktif saat pointer bergerak
               if (dragged && e.target.hasPointerCapture && e.target.hasPointerCapture(e.pointerId)) {
                 e.stopPropagation();
               }
             }}
             style={{
-              cursor: hovered ? (dragged ? 'grabbing' : 'grab') : 'auto'
+              cursor: hovered ? (dragged ? "grabbing" : "grab") : "auto",
             }}
           >
             <mesh geometry={nodes.card.geometry} castShadow receiveShadow>
