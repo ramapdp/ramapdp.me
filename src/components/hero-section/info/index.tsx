@@ -8,10 +8,10 @@ const HeroInfo = () => {
 
   return (
     <div className="pointer-events-none relative">
-      <div className="text-muted-foreground pointer-events-auto md:mb-6 inline-flex items-center gap-2 rounded-full border px-2 py-2 sm:px-2 md:px-3 sm:py-2 md:py-3 text-xs backdrop-blur-md">
+      <div className="text-muted-foreground pointer-events-auto mb-8 inline-flex items-center gap-2 rounded-full border px-2 py-2 text-xs backdrop-blur-md sm:px-2 sm:py-2 md:mb-6 md:px-3 md:py-3">
         <Sparkles className="size-3.5" />
         <span className="hidden sm:inline">Building delightful, fast web experiences</span>
-        <span className="sm:hidden">Building fast web experiences</span>  
+        <span className="sm:hidden">Building fast web experiences</span>
       </div>
 
       <h1 className="font-rethink-sans pointer-events-none text-4xl leading-tight font-bold text-balance sm:text-5xl md:text-6xl lg:text-7xl">
