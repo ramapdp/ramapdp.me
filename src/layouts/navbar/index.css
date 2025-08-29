@@ -6,12 +6,30 @@
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: none !important;
+  width: auto;
+  min-width: auto;
+  max-width: fit-content;
 }
 
 .dark .navbar-glassmorphism {
   background: rgba(15, 15, 15, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile menu glassmorphism styles - terpisah dari navbar */
+.mobile-menu-glassmorphism {
+  background: rgba(156, 163, 175, 0.08);
+  border: 1px solid rgba(156, 163, 175, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark .mobile-menu-glassmorphism {
+  background: rgba(15, 15, 15, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Navbar container optimization */
@@ -29,7 +47,7 @@
 .navbar-link {
   position: relative;
   overflow: hidden;
-  transition: 
+  transition:
     background-color 200ms ease,
     color 200ms ease !important;
 }
@@ -59,7 +77,7 @@
 /* Theme button styles */
 .theme-button,
 .theme-button * {
-  transition: 
+  transition:
     background-color 200ms ease,
     color 200ms ease !important;
 }
@@ -100,7 +118,69 @@
   transform: translateY(0);
 }
 
-/* Glassmorphism effect mixin */
+/* Hamburger button styles */
+.hamburger-button {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease !important;
+}
+
+.hamburger-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.hamburger-button:hover::before {
+  opacity: 1;
+}
+
+.dark .hamburger-button::before {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile menu animations */
+.mobile-menu-overlay {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Mobile menu positioning */
+.mobile-menu-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 1rem;
+  padding-top: 5rem; /* Space for navbar */
+}
+
+.mobile-menu-content {
+  width: 250px;
+  max-width: calc(100vw - 2rem);
+}
+
+/* Prevent scroll when mobile menu is open */
+.mobile-menu-open {
+  overflow: hidden;
+}
+
+/* Glassmorphism effect mixins */
 .glass-effect {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -119,7 +199,7 @@
 }
 
 .smooth-transition-colors {
-  transition: 
+  transition:
     background-color 200ms ease,
     color 200ms ease,
     border-color 200ms ease;
@@ -134,4 +214,68 @@
 .prevent-flicker {
   transform: translateZ(0);
   will-change: auto;
+}
+
+/* Responsive navbar positioning */
+@media (max-width: 639px) {
+  /* Mobile: right alignment */
+  .navbar-container {
+    top: 16px;
+    padding: 0 16px;
+  }
+
+  .navbar-container > div {
+    justify-content: flex-end;
+  }
+
+  .navbar-glassmorphism {
+    background: rgba(156, 163, 175, 0.15);
+    border: 1px solid rgba(156, 163, 175, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 4px 10px;
+  }
+
+  .dark .navbar-glassmorphism {
+    background: rgba(15, 15, 15, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Mobile menu specific styles */
+  .mobile-menu-glassmorphism {
+    background: rgba(156, 163, 175, 0.12);
+    border: 1px solid rgba(156, 163, 175, 0.2);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .dark .mobile-menu-glassmorphism {
+    background: rgba(15, 15, 15, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (min-width: 640px) {
+  /* SM and up: center alignment */
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+
+  .navbar-container > div {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) {
+  /* MD: center alignment with more spacing */
+  .navbar-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* LG and up: center alignment with container system */
+  .navbar-container {
+    padding: 0;
+  }
 }

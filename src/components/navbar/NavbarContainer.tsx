@@ -8,7 +8,8 @@ interface NavbarContainerProps {
 export const NavbarContainer = ({ children, className }: NavbarContainerProps) => (
   <div
     className={cn(
-      "container-nav navbar-glassmorphism flex w-fit items-center justify-center gap-3 rounded-full p-1.5 shadow-lg backdrop-blur-md",
+      "navbar-glassmorphism flex items-center justify-center gap-3 rounded-full shadow-lg backdrop-blur-md",
+      "w-fit max-w-max min-w-0 px-2 py-1.5 sm:px-3 sm:py-1.5",
       className,
     )}
   >

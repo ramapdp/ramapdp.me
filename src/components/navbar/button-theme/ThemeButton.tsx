@@ -8,7 +8,7 @@ const ThemeButton: React.FC = () => {
   return (
     <Button
       variant="ghost"
-      className="theme-button h-fit w-fit cursor-pointer overflow-hidden rounded-full p-2 px-3 transition-colors duration-200 hover:bg-white/60 dark:hover:bg-gray-800/60"
+      className="theme-button h-fit w-fit cursor-pointer overflow-hidden rounded-full p-1 px-1.5 transition-colors duration-200 hover:bg-white/60 sm:p-2 sm:px-3 dark:hover:bg-gray-800/60"
       onClick={() => !isTransitioning && setTheme(getNextTheme(actualTheme))}
       disabled={isTransitioning}
       aria-label={`Switch to ${getNextTheme(actualTheme)} theme.`}
@@ -18,6 +18,5 @@ const ThemeButton: React.FC = () => {
     </Button>
   );
 };
-
 
 export default ThemeButton;
